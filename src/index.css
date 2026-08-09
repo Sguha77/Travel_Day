@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-surface: #fcf8fb;
+    --color-surface-dim: #dcd9dc;
+    --color-surface-bright: #fcf8fb;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f6f3f5;
+    --color-surface-container: #f0edef;
+    --color-surface-container-high: #eae7ea;
+    --color-surface-container-highest: #e4e2e4;
+    --color-on-surface: #1b1b1d;
+    --color-on-surface-variant: #414755;
+    --color-inverse-surface: #303032;
+    --color-inverse-on-surface: #f3f0f2;
+    --color-outline: #717786;
+    --color-outline-variant: #c1c6d7;
+    --color-primary: #0058bc;
+    --color-on-primary: #ffffff;
+    --color-primary-container: #0070eb;
+    --color-on-primary-container: #fefcff;
+    --color-inverse-primary: #adc6ff;
+    --color-secondary: #825500;
+    --color-on-secondary: #ffffff;
+    --color-secondary-container: #feaa00;
+    --color-on-secondary-container: #684300;
+    --color-tertiary: #006b27;
+    --color-on-tertiary: #ffffff;
+    --color-tertiary-container: #008733;
+    --color-on-tertiary-container: #f7fff2;
+    --color-error: #ba1a1a;
+    --color-on-error: #ffffff;
+    --color-error-container: #ffdad6;
+    --color-on-error-container: #93000a;
+    --color-primary-fixed: #d8e2ff;
+    --color-primary-fixed-dim: #adc6ff;
+    --color-on-primary-fixed: #001a41;
+    --color-background: #fcf8fb;
+    --color-on-background: #1b1b1d;
+    --color-surface-variant: #e4e2e4;
+  }
+
+  .dark {
+    --color-surface: #1b1b1d;
+    --color-surface-dim: #131315;
+    --color-surface-bright: #303032;
+    --color-surface-container-lowest: #212123;
+    --color-surface-container-low: #28282a;
+    --color-surface-container: #2f2f32;
+    --color-surface-container-high: #3a3a3e;
+    --color-surface-container-highest: #45454a;
+    --color-on-surface: #f3f0f2;
+    --color-on-surface-variant: #c1c6d7;
+    --color-outline: #8b91a0;
+    --color-outline-variant: #414755;
+    --color-primary: #adc6ff;
+    --color-on-primary: #002e69;
+    --color-primary-container: #004493;
+    --color-on-primary-container: #d8e2ff;
+    --color-background: #1b1b1d;
+    --color-on-background: #f3f0f2;
+  }
+}
+
+/* Spinner Animation for Processing State */
+.spinner {
+  animation: rotate 2s linear infinite;
+}
+
+.path {
+  stroke: #0058bc;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+.fade-text {
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; transform: translateY(5px); }
+  10%, 90% { opacity: 1; transform: translateY(0); }
+}
+
+/* Material Symbols font tweak */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+

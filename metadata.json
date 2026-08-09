@@ -1,0 +1,6 @@
+{
+  "name": "Travel Day",
+  "description": "Smart travel companion app with live day-of-journey timelines, flight status, transit calculations, and boarding pass manager.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
