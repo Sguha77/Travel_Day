@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Trip, EventType, TransitPreference } from "./types";
 import { INITIAL_TRIPS } from "./data/mockTrips";
 import { generateTimelineForTrip } from "./utils/timelineGenerator";
+
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
 import { TimelineView } from "./components/TimelineView";
@@ -18,8 +19,8 @@ export default function App() {
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved trips", e);
+      } catch (error) {
+        console.error("Failed to parse saved trips:", error);
       }
     }
 
@@ -35,20 +36,23 @@ export default function App() {
   >("itinerary");
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showBoardingPassModal, setShowBoardingPassModal] = useState(false);
-  const [showAssistantDrawer, setShowAssistantDrawer] = useState(false);
+  const [showBoardingPassModal, setShowBoardingPassModal] =
+    useState(false);
+  const [showAssistantDrawer, setShowAssistantDrawer] =
+    useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     return localStorage.getItem("travel_day_theme") === "dark";
   });
 
-  /* Save trips */
   useEffect(() => {
-    localStorage.setItem("travel_day_trips", JSON.stringify(trips));
+    localStorage.setItem(
+      "travel_day_trips",
+      JSON.stringify(trips)
+    );
   }, [trips]);
 
-  /* Apply theme */
   useEffect(() => {
     const root = document.documentElement;
 
@@ -61,12 +65,8 @@ export default function App() {
     );
   }, [darkMode]);
 
-  const toggleTheme = () => {
-    setDarkMode((current) => !current);
-  };
-
   const activeTrip =
-    trips.find((t) => t.id === activeTripId) ||
+    trips.find((trip) => trip.id === activeTripId) ||
     trips[0] ||
     null;
 
@@ -94,7 +94,11 @@ export default function App() {
         params.tsaPrecheck
       );
 
-      setTrips((prev) => [newTrip, ...prev]);
+      setTrips((previousTrips) => [
+        newTrip,
+        ...previousTrips,
+      ]);
+
       setActiveTripId(newTrip.id);
     }, 500);
   };
@@ -102,23 +106,31 @@ export default function App() {
   const handleToggleStepComplete = (stepId: string) => {
     if (!activeTrip) return;
 
-    setTrips((prev) =>
-      prev.map((t) => {
-        if (t.id !== activeTrip.id) return t;
+    setTrips((previousTrips) =>
+      previousTrips.map((trip) => {
+        if (trip.id !== activeTrip.id) {
+          return trip;
+        }
+
+        const updatedSteps = trip.steps.map((step) => {
+          if (step.id !== stepId) {
+            return step;
+          }
+
+          const completed = !step.isCompleted;
+
+          return {
+            ...step,
+            isCompleted: completed,
+            status: completed
+              ? ("completed" as const)
+              : ("upcoming" as const),
+          };
+        });
 
         return {
-          ...t,
-          steps: t.steps.map((s) => {
-            if (s.id !== stepId) return s;
-
-            const completed = !s.isCompleted;
-
-            return {
-              ...s,
-              isCompleted: completed,
-              status: completed ? "completed" : "upcoming",
-            };
-          }),
+          ...trip,
+          steps: updatedSteps,
         };
       })
     );
@@ -137,12 +149,17 @@ export default function App() {
       isCompleted: false,
     };
 
-    setTrips((prev) =>
-      prev.map((t) =>
-        t.id === activeTrip.id
-          ? { ...t, steps: [...t.steps, newStep] }
-          : t
-      )
+    setTrips((previousTrips) =>
+      previousTrips.map((trip) => {
+        if (trip.id !== activeTrip.id) {
+          return trip;
+        }
+
+        return {
+          ...trip,
+          steps: [...trip.steps, newStep],
+        };
+      })
     );
   };
 
@@ -153,19 +170,22 @@ export default function App() {
 
     if (tab === "pass") {
       setShowBoardingPassModal(true);
-    } else if (tab === "ai") {
+    }
+
+    if (tab === "ai") {
       setShowAssistantDrawer(true);
-    } else if (tab === "settings") {
+    }
+
+    if (tab === "settings") {
       setShowSettingsModal(true);
     }
   };
 
   return (
-    <div className="app-background min-h-screen text-slate-900 dark:text-white transition-colors duration-500">
-      {/* Animated ambient lights */}
-      <div className="ambient-orb orb-one" />
-      <div className="ambient-orb orb-two" />
-      <div className="ambient-orb orb-three" />
+    <div className="app-background min-h-screen text-slate-900 dark:text-slate-100">
+      <div className="ambient-orb ambient-orb-one" />
+      <div className="ambient-orb ambient-orb-two" />
+      <div className="ambient-orb ambient-orb-three" />
 
       <div className="relative z-10">
         <Header
@@ -179,7 +199,9 @@ export default function App() {
           onOpenAssistant={() => setShowAssistantDrawer(true)}
           onOpenSettings={() => setShowSettingsModal(true)}
           darkMode={darkMode}
-          onToggleDarkMode={toggleTheme}
+          onToggleDarkMode={() =>
+            setDarkMode((current) => !current)
+          }
         />
 
         {isProcessing ? (
@@ -202,80 +224,80 @@ export default function App() {
             onAddCustomNote={handleAddCustomNote}
           />
         ) : (
-          <div className="pt-32 text-center px-4">
-            <div className="glass-card rounded-3xl p-10 max-w-md mx-auto">
-              <span className="material-symbols-outlined text-5xl gradient-text">
-                flight_takeoff
-              </span>
+          <div className="min-h-screen flex items-center justify-center px-5 pt-20 pb-24">
+            <div className="glass-card rounded-3xl p-8 text-center max-w-sm">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white">
+                <span className="material-symbols-outlined">
+                  flight_takeoff
+                </span>
+              </div>
 
-              <h2 className="text-2xl font-extrabold mt-4">
-                Your journey starts here
-              </h2>
-
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-                Create your first trip and let Travel Day build your timeline.
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                No active trips found.
               </p>
 
               <button
                 onClick={() => setActiveTab("add")}
-                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white font-bold shadow-lg hover:scale-[1.03] active:scale-95 transition-all"
+                className="gradient-button mt-5 px-5 py-3 rounded-xl text-xs font-bold"
               >
                 Create Your First Trip
               </button>
             </div>
           </div>
         )}
+
+        <BottomNav
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
+
+        {showBoardingPassModal && activeTrip && (
+          <BoardingPassModal
+            trip={activeTrip}
+            onClose={() => {
+              setShowBoardingPassModal(false);
+
+              if (activeTab === "pass") {
+                setActiveTab("itinerary");
+              }
+            }}
+          />
+        )}
+
+        {showAssistantDrawer && (
+          <AIAssistantDrawer
+            trip={activeTrip}
+            onClose={() => {
+              setShowAssistantDrawer(false);
+
+              if (activeTab === "ai") {
+                setActiveTab("itinerary");
+              }
+            }}
+          />
+        )}
+
+        {showSettingsModal && (
+          <SettingsModal
+            onClose={() => {
+              setShowSettingsModal(false);
+
+              if (activeTab === "settings") {
+                setActiveTab("itinerary");
+              }
+            }}
+            darkMode={darkMode}
+            onToggleDarkMode={() =>
+              setDarkMode((current) => !current)
+            }
+            onResetDefaultTrips={() => {
+              setTrips(INITIAL_TRIPS);
+              setActiveTripId(INITIAL_TRIPS[0].id);
+              setActiveTab("itinerary");
+            }}
+          />
+        )}
       </div>
-
-      <BottomNav
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
-
-      {showBoardingPassModal && activeTrip && (
-        <BoardingPassModal
-          trip={activeTrip}
-          onClose={() => {
-            setShowBoardingPassModal(false);
-
-            if (activeTab === "pass") {
-              setActiveTab("itinerary");
-            }
-          }}
-        />
-      )}
-
-      {showAssistantDrawer && (
-        <AIAssistantDrawer
-          trip={activeTrip}
-          onClose={() => {
-            setShowAssistantDrawer(false);
-
-            if (activeTab === "ai") {
-              setActiveTab("itinerary");
-            }
-          }}
-        />
-      )}
-
-      {showSettingsModal && (
-        <SettingsModal
-          onClose={() => {
-            setShowSettingsModal(false);
-
-            if (activeTab === "settings") {
-              setActiveTab("itinerary");
-            }
-          }}
-          darkMode={darkMode}
-          onToggleDarkMode={toggleTheme}
-          onResetDefaultTrips={() => {
-            setTrips(INITIAL_TRIPS);
-            setActiveTripId(INITIAL_TRIPS[0].id);
-            setActiveTab("itinerary");
-          }}
-        />
-      )}
     </div>
   );
 }
