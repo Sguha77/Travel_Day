@@ -1,77 +1,468 @@
+```css
 @import "tailwindcss";
 
+/* =========================================================
+   TRAVEL DAY — PREMIUM DESIGN SYSTEM
+   ========================================================= */
+
 @layer base {
+
+  /* =======================================================
+     LIGHT THEME
+     ======================================================= */
+
   :root {
-    --color-surface: #fcf8fb;
-    --color-surface-dim: #dcd9dc;
-    --color-surface-bright: #fcf8fb;
+    /* Backgrounds */
+    --color-background: #f4f7fb;
+    --color-on-background: #101828;
+
+    --color-surface: #ffffff;
+    --color-surface-dim: #e8edf4;
+    --color-surface-bright: #ffffff;
+
     --color-surface-container-lowest: #ffffff;
-    --color-surface-container-low: #f6f3f5;
-    --color-surface-container: #f0edef;
-    --color-surface-container-high: #eae7ea;
-    --color-surface-container-highest: #e4e2e4;
-    --color-on-surface: #1b1b1d;
-    --color-on-surface-variant: #414755;
-    --color-inverse-surface: #303032;
-    --color-inverse-on-surface: #f3f0f2;
-    --color-outline: #717786;
-    --color-outline-variant: #c1c6d7;
-    --color-primary: #0058bc;
+    --color-surface-container-low: #f8fafc;
+    --color-surface-container: #f1f5f9;
+    --color-surface-container-high: #e8eef6;
+    --color-surface-container-highest: #dce5f0;
+
+    /* Text */
+    --color-on-surface: #101828;
+    --color-on-surface-variant: #475569;
+
+    /* Primary — premium blue */
+    --color-primary: #2563eb;
     --color-on-primary: #ffffff;
-    --color-primary-container: #0070eb;
-    --color-on-primary-container: #fefcff;
-    --color-inverse-primary: #adc6ff;
-    --color-secondary: #825500;
+
+    --color-primary-container: #dbeafe;
+    --color-on-primary-container: #1e3a8a;
+
+    --color-inverse-primary: #93b4ff;
+
+    /* Secondary — teal */
+    --color-secondary: #0f766e;
     --color-on-secondary: #ffffff;
-    --color-secondary-container: #feaa00;
-    --color-on-secondary-container: #684300;
-    --color-tertiary: #006b27;
+
+    --color-secondary-container: #ccfbf1;
+    --color-on-secondary-container: #134e4a;
+
+    /* Accent — warm gold */
+    --color-tertiary: #b7791f;
     --color-on-tertiary: #ffffff;
-    --color-tertiary-container: #008733;
-    --color-on-tertiary-container: #f7fff2;
-    --color-error: #ba1a1a;
+
+    --color-tertiary-container: #fef3c7;
+    --color-on-tertiary-container: #78350f;
+
+    /* Borders */
+    --color-outline: #94a3b8;
+    --color-outline-variant: #dbe3ed;
+
+    /* Error */
+    --color-error: #dc2626;
     --color-on-error: #ffffff;
-    --color-error-container: #ffdad6;
-    --color-on-error-container: #93000a;
-    --color-primary-fixed: #d8e2ff;
-    --color-primary-fixed-dim: #adc6ff;
-    --color-on-primary-fixed: #001a41;
-    --color-background: #fcf8fb;
-    --color-on-background: #1b1b1d;
-    --color-surface-variant: #e4e2e4;
+
+    --color-error-container: #fee2e2;
+    --color-on-error-container: #991b1b;
+
+    /* Inverse */
+    --color-inverse-surface: #172033;
+    --color-inverse-on-surface: #f8fafc;
+
+    /* Fixed colors */
+    --color-primary-fixed: #dbeafe;
+    --color-primary-fixed-dim: #93b4ff;
+    --color-on-primary-fixed: #172554;
+
+    /* Premium gradients */
+    --gradient-primary:
+      linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+
+    --gradient-premium:
+      linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #06b6d4 100%);
+
+    --gradient-gold:
+      linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+
+    /* Shadows */
+    --shadow-sm:
+      0 2px 8px rgba(15, 23, 42, 0.06);
+
+    --shadow-md:
+      0 10px 30px rgba(15, 23, 42, 0.08);
+
+    --shadow-lg:
+      0 20px 50px rgba(15, 23, 42, 0.12);
+
+    --shadow-glow:
+      0 10px 40px rgba(37, 99, 235, 0.15);
   }
 
-  .dark {
-    --color-surface: #1b1b1d;
-    --color-surface-dim: #131315;
-    --color-surface-bright: #303032;
-    --color-surface-container-lowest: #212123;
-    --color-surface-container-low: #28282a;
-    --color-surface-container: #2f2f32;
-    --color-surface-container-high: #3a3a3e;
-    --color-surface-container-highest: #45454a;
-    --color-on-surface: #f3f0f2;
-    --color-on-surface-variant: #c1c6d7;
-    --color-outline: #8b91a0;
-    --color-outline-variant: #414755;
-    --color-primary: #adc6ff;
-    --color-on-primary: #002e69;
-    --color-primary-container: #004493;
-    --color-on-primary-container: #d8e2ff;
-    --color-background: #1b1b1d;
-    --color-on-background: #f3f0f2;
+
+  /* =======================================================
+     DARK THEME
+
+     IMPORTANT:
+     This works when "dark" is added to <html>.
+     ======================================================= */
+
+  html.dark {
+
+    /* Backgrounds */
+    --color-background: #060d18;
+    --color-on-background: #f8fafc;
+
+    --color-surface: #0d1828;
+    --color-surface-dim: #050b14;
+    --color-surface-bright: #17263a;
+
+    --color-surface-container-lowest: #09121f;
+    --color-surface-container-low: #0d1828;
+    --color-surface-container: #122035;
+    --color-surface-container-high: #172941;
+    --color-surface-container-highest: #1d334f;
+
+    /* Text */
+    --color-on-surface: #f8fafc;
+    --color-on-surface-variant: #aab8ca;
+
+    /* Primary */
+    --color-primary: #6ea0ff;
+    --color-on-primary: #071a3d;
+
+    --color-primary-container: #123b78;
+    --color-on-primary-container: #dbe8ff;
+
+    --color-inverse-primary: #2563eb;
+
+    /* Secondary */
+    --color-secondary: #2dd4bf;
+    --color-on-secondary: #042f2e;
+
+    --color-secondary-container: #134e4a;
+    --color-on-secondary-container: #ccfbf1;
+
+    /* Accent */
+    --color-tertiary: #f6c667;
+    --color-on-tertiary: #3b2600;
+
+    --color-tertiary-container: #5c3b08;
+    --color-on-tertiary-container: #fef3c7;
+
+    /* Borders */
+    --color-outline: #64748b;
+    --color-outline-variant: #263852;
+
+    /* Error */
+    --color-error: #ff7169;
+    --color-on-error: #450a0a;
+
+    --color-error-container: #7f1d1d;
+    --color-on-error-container: #fee2e2;
+
+    /* Inverse */
+    --color-inverse-surface: #e8edf4;
+    --color-inverse-on-surface: #101828;
+
+    /* Fixed */
+    --color-primary-fixed: #dbeafe;
+    --color-primary-fixed-dim: #93b4ff;
+    --color-on-primary-fixed: #172554;
+
+    /* Premium gradients */
+    --gradient-primary:
+      linear-gradient(135deg, #4f8cff 0%, #22d3ee 100%);
+
+    --gradient-premium:
+      linear-gradient(135deg, #1d4ed8 0%, #4f8cff 50%, #22d3ee 100%);
+
+    --gradient-gold:
+      linear-gradient(135deg, #d97706 0%, #f4c76b 100%);
+
+    /* Shadows */
+    --shadow-sm:
+      0 2px 10px rgba(0, 0, 0, 0.25);
+
+    --shadow-md:
+      0 12px 35px rgba(0, 0, 0, 0.3);
+
+    --shadow-lg:
+      0 25px 70px rgba(0, 0, 0, 0.4);
+
+    --shadow-glow:
+      0 10px 45px rgba(79, 140, 255, 0.18);
   }
 }
 
-/* Spinner Animation for Processing State */
+
+/* =========================================================
+   GLOBAL PAGE
+   ========================================================= */
+
+html {
+  min-height: 100%;
+  background: var(--color-background);
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+
+  font-family:
+    "DM Sans",
+    "Inter",
+    system-ui,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      color-mix(
+        in srgb,
+        var(--color-primary) 9%,
+        transparent
+      ),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      color-mix(
+        in srgb,
+        var(--color-secondary) 8%,
+        transparent
+      ),
+      transparent 28%
+    ),
+    var(--color-background);
+
+  color: var(--color-on-background);
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   PREMIUM CARD
+   ========================================================= */
+
+.premium-card {
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-outline-variant);
+
+  border-radius: 20px;
+
+  box-shadow: var(--shadow-md);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-3px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--color-primary) 40%,
+      var(--color-outline-variant)
+    );
+
+  box-shadow: var(--shadow-lg);
+}
+
+
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
+
+.glass {
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface) 75%,
+      transparent
+    );
+
+  border: 1px solid var(--color-outline-variant);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-md);
+}
+
+
+/* =========================================================
+   GRADIENT TEXT
+   ========================================================= */
+
+.gradient-text {
+  background: var(--gradient-primary);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+}
+
+
+/* =========================================================
+   PREMIUM BUTTON
+   ========================================================= */
+
+.premium-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 11px 20px;
+
+  border: none;
+  border-radius: 12px;
+
+  color: #ffffff;
+
+  background: var(--gradient-primary);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: var(--shadow-glow);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.premium-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 40px
+    color-mix(
+      in srgb,
+      var(--color-primary) 30%,
+      transparent
+    );
+}
+
+.premium-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  border: 1px solid var(--color-outline-variant);
+
+  background: var(--color-surface);
+
+  color: var(--color-on-surface);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-container);
+
+  border-color: var(--color-primary);
+
+  transform: rotate(8deg);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+input,
+textarea,
+select {
+  background: var(--color-surface);
+
+  color: var(--color-on-surface);
+
+  border: 1px solid var(--color-outline-variant);
+
+  border-radius: 12px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted, #718096);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary);
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--color-primary) 15%,
+      transparent
+    );
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
 .spinner {
   animation: rotate 2s linear infinite;
 }
 
 .path {
-  stroke: #0058bc;
+  stroke: var(--color-primary);
+
   stroke-linecap: round;
-  animation: dash 1.5s ease-in-out infinite;
+
+  animation:
+    dash 1.5s ease-in-out infinite;
 }
 
 @keyframes rotate {
@@ -85,28 +476,101 @@
     stroke-dasharray: 1, 150;
     stroke-dashoffset: 0;
   }
+
   50% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -35;
   }
+
   100% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -124;
   }
 }
 
+
+/* =========================================================
+   FADE TEXT
+   ========================================================= */
+
 .fade-text {
-  animation: fadeInOut 3s ease-in-out infinite;
+  animation:
+    fadeInOut 3s ease-in-out infinite;
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; transform: translateY(5px); }
-  10%, 90% { opacity: 1; transform: translateY(0); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Material Symbols font tweak */
+
+/* =========================================================
+   MATERIAL SYMBOLS
+   ========================================================= */
+
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 24;
+
   vertical-align: middle;
 }
 
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-container);
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  background: var(--color-primary);
+
+  color: var(--color-on-primary);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .premium-card {
+    border-radius: 16px;
+  }
+}
+```
