@@ -1,6 +1,6 @@
 ```html
 <!doctype html>
-<html lang="en" class="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,386 +16,313 @@
       rel="stylesheet"
     />
 
-    <!-- Material Icons -->
+    <!-- Material Symbols -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
+      :root {
+        --navy: #102a43;
+        --blue: #1683e8;
+        --sky: #eaf6ff;
+        --orange: #ff8a4c;
+        --yellow: #ffc857;
+        --cream: #fffaf5;
+        --text: #102a43;
+        --muted: #627d98;
+        --white: #ffffff;
+      }
+
       * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
         scroll-behavior: smooth;
       }
 
       body {
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(
+            circle at 10% 10%,
+            rgba(22, 131, 232, 0.12),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 90% 20%,
+            rgba(255, 138, 76, 0.13),
+            transparent 25%
+          ),
+          var(--cream);
+
+        color: var(--text);
+        min-height: 100vh;
         overflow-x: hidden;
       }
 
-      /* ---------------------------
-         PAGE ENTRANCE
-      ---------------------------- */
-      .page-enter {
-        animation: pageEnter 0.9s ease-out forwards;
-      }
+      /* Soft decorative circles */
 
-      @keyframes pageEnter {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* ---------------------------
-         FLOATING BACKGROUND
-      ---------------------------- */
-      .travel-orb {
+      body::before,
+      body::after {
+        content: "";
         position: fixed;
-        border-radius: 9999px;
+        width: 350px;
+        height: 350px;
+        border-radius: 50%;
+        filter: blur(90px);
         pointer-events: none;
-        filter: blur(70px);
-        opacity: 0.35;
         z-index: -1;
       }
 
-      .orb-one {
-        width: 280px;
-        height: 280px;
-        background: #ff9f7f;
-        top: 8%;
-        left: -100px;
-        animation: orbMove 10s ease-in-out infinite alternate;
+      body::before {
+        background: rgba(22, 131, 232, 0.12);
+        top: -150px;
+        left: -120px;
       }
 
-      .orb-two {
-        width: 320px;
-        height: 320px;
-        background: #9bbcff;
+      body::after {
+        background: rgba(255, 138, 76, 0.1);
         right: -120px;
-        top: 35%;
-        animation: orbMove 13s ease-in-out infinite alternate-reverse;
+        bottom: -150px;
       }
 
-      .orb-three {
-        width: 240px;
-        height: 240px;
-        background: #ffd66b;
-        bottom: 5%;
-        left: 40%;
-        animation: orbMove 12s ease-in-out infinite alternate;
+      /* Root */
+
+      #root {
+        min-height: 100vh;
       }
 
-      @keyframes orbMove {
-        from {
-          transform: translate(0, 0) scale(1);
-        }
+      /* Selection */
 
-        to {
-          transform: translate(60px, -40px) scale(1.15);
-        }
+      ::selection {
+        background: var(--blue);
+        color: white;
       }
 
-      /* ---------------------------
-         FLOATING CLOUDS
-      ---------------------------- */
-      .cloud {
-        position: absolute;
-        opacity: 0.55;
-        animation: cloudMove linear infinite;
+      /* Scrollbar */
+
+      ::-webkit-scrollbar {
+        width: 8px;
       }
 
-      .cloud-one {
-        top: 15%;
-        left: -200px;
-        animation-duration: 35s;
+      ::-webkit-scrollbar-track {
+        background: #f4f8fb;
       }
 
-      .cloud-two {
-        top: 30%;
-        left: -300px;
-        animation-duration: 45s;
-        animation-delay: 8s;
+      ::-webkit-scrollbar-thumb {
+        background: #9ccff4;
+        border-radius: 20px;
       }
 
-      @keyframes cloudMove {
-        from {
-          transform: translateX(0);
-        }
-
-        to {
-          transform: translateX(calc(100vw + 500px));
-        }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--blue);
       }
 
-      /* ---------------------------
-         AIRPLANE
-      ---------------------------- */
-      .plane {
-        animation: flyPlane 7s ease-in-out infinite;
+      /* Common glass effect */
+
+      .glass {
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 15px 40px rgba(16, 42, 67, 0.08);
       }
 
-      @keyframes flyPlane {
-        0% {
-          transform: translate(-30px, 20px) rotate(-8deg);
-          opacity: 0;
-        }
+      /* Cards */
 
-        15% {
-          opacity: 1;
-        }
-
-        50% {
-          transform: translate(45vw, -20px) rotate(-3deg);
-          opacity: 1;
-        }
-
-        85% {
-          opacity: 1;
-        }
-
-        100% {
-          transform: translate(105vw, -80px) rotate(-8deg);
-          opacity: 0;
-        }
-      }
-
-      .flight-line {
-        width: 180px;
-        border-top: 2px dashed rgba(30, 64, 175, 0.25);
-        transform: rotate(-8deg);
-        animation: lineFade 7s ease-in-out infinite;
-      }
-
-      @keyframes lineFade {
-        0%,
-        100% {
-          opacity: 0;
-        }
-
-        30%,
-        70% {
-          opacity: 1;
-        }
-      }
-
-      /* ---------------------------
-         HERO TEXT
-      ---------------------------- */
-      .hero-title {
-        background: linear-gradient(
-          90deg,
-          #111827,
-          #2563eb,
-          #7c3aed,
-          #111827
-        );
-
-        background-size: 300% auto;
-
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-
-        animation: gradientText 6s linear infinite;
-      }
-
-      @keyframes gradientText {
-        to {
-          background-position: 300% center;
-        }
-      }
-
-      /* ---------------------------
-         FLOATING CARDS
-      ---------------------------- */
-      .floating-card {
-        animation: floatingCard 4s ease-in-out infinite;
-      }
-
-      .floating-card:nth-child(2) {
-        animation-delay: 1s;
-      }
-
-      .floating-card:nth-child(3) {
-        animation-delay: 2s;
-      }
-
-      @keyframes floatingCard {
-        0%,
-        100% {
-          transform: translateY(0) rotate(0deg);
-        }
-
-        50% {
-          transform: translateY(-12px) rotate(1deg);
-        }
-      }
-
-      /* ---------------------------
-         CARD HOVER
-      ---------------------------- */
       .travel-card {
+        background: white;
+        border: 1px solid #e8f0f6;
+        border-radius: 24px;
+        box-shadow: 0 12px 35px rgba(16, 42, 67, 0.07);
         transition:
-          transform 0.35s ease,
-          box-shadow 0.35s ease,
-          border-color 0.35s ease;
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          border-color 0.3s ease;
       }
 
       .travel-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow:
-          0 25px 50px rgba(0, 0, 0, 0.12),
-          0 0 0 1px rgba(59, 130, 246, 0.15);
+        transform: translateY(-6px);
+        border-color: #b9ddf8;
+        box-shadow: 0 20px 45px rgba(16, 42, 67, 0.12);
       }
 
-      /* ---------------------------
-         IMAGE ZOOM
-      ---------------------------- */
-      .destination-image {
-        transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
+      /* Primary button */
 
-      .travel-card:hover .destination-image {
-        transform: scale(1.08);
-      }
-
-      /* ---------------------------
-         BUTTON
-      ---------------------------- */
-      .travel-button {
-        position: relative;
-        overflow: hidden;
-        transition:
-          transform 0.25s ease,
-          box-shadow 0.25s ease;
-      }
-
-      .travel-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 25px rgba(37, 99, 235, 0.3);
-      }
-
-      .travel-button::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -120%;
-        width: 80%;
-        height: 100%;
+      .primary-button {
         background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.45),
-          transparent
+          135deg,
+          #1683e8,
+          #0875d1
         );
-        transform: skewX(-20deg);
-        transition: left 0.7s ease;
+
+        color: white;
+        border: none;
+        border-radius: 14px;
+        padding: 13px 22px;
+        font-weight: 600;
+
+        box-shadow:
+          0 8px 20px rgba(22, 131, 232, 0.25);
+
+        transition: all 0.25s ease;
       }
 
-      .travel-button:hover::after {
-        left: 140%;
+      .primary-button:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 12px 25px rgba(22, 131, 232, 0.35);
       }
 
-      /* ---------------------------
-         SCROLL INDICATOR
-      ---------------------------- */
-      .scroll-dot {
-        animation: scrollDot 2s ease-in-out infinite;
+      /* Secondary button */
+
+      .secondary-button {
+        background: white;
+        color: var(--navy);
+        border: 1px solid #dbe9f3;
+        border-radius: 14px;
+        padding: 12px 20px;
+        font-weight: 600;
+        transition: all 0.25s ease;
       }
 
-      @keyframes scrollDot {
+      .secondary-button:hover {
+        background: var(--sky);
+        border-color: #b8dcf5;
+      }
+
+      /* Accent badge */
+
+      .travel-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 999px;
+
+        background: #fff1e8;
+        color: #d86127;
+
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      /* Icon containers */
+
+      .blue-icon {
+        background: #e7f4ff;
+        color: #1683e8;
+      }
+
+      .orange-icon {
+        background: #fff0e7;
+        color: #ef762f;
+      }
+
+      .yellow-icon {
+        background: #fff7d9;
+        color: #d99b00;
+      }
+
+      .green-icon {
+        background: #e8f8ef;
+        color: #23945a;
+      }
+
+      /* Destination image */
+
+      .destination-image {
+        overflow: hidden;
+        border-radius: 20px;
+      }
+
+      .destination-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+
+      .travel-card:hover .destination-image img {
+        transform: scale(1.06);
+      }
+
+      /* Gradient hero */
+
+      .hero-gradient {
+        background:
+          linear-gradient(
+            120deg,
+            rgba(16, 42, 67, 0.96),
+            rgba(20, 83, 130, 0.9)
+          );
+      }
+
+      /* Floating travel element */
+
+      .floating-travel {
+        animation: floating 4s ease-in-out infinite;
+      }
+
+      @keyframes floating {
         0%,
         100% {
           transform: translateY(0);
-          opacity: 0.4;
         }
 
         50% {
-          transform: translateY(7px);
-          opacity: 1;
+          transform: translateY(-8px);
         }
       }
 
-      /* ---------------------------
-         REDUCED MOTION
-      ---------------------------- */
+      /* Fade entrance */
+
+      .fade-up {
+        animation: fadeUp 0.7s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Mobile */
+
+      @media (max-width: 768px) {
+        body {
+          background: var(--cream);
+        }
+
+        .travel-card {
+          border-radius: 20px;
+        }
+      }
+
+      /* Accessibility */
+
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
         *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
+          animation: none !important;
+          transition: none !important;
           scroll-behavior: auto !important;
-          transition-duration: 0.01ms !important;
         }
       }
     </style>
   </head>
 
-  <body
-    class="bg-[#fcf8fb] dark:bg-[#1b1b1d] text-[#1b1b1d] dark:text-[#f3f0f2] font-['Inter',sans-serif] antialiased"
-  >
-
-    <!-- Animated background -->
-    <div class="travel-orb orb-one"></div>
-    <div class="travel-orb orb-two"></div>
-    <div class="travel-orb orb-three"></div>
-
-    <div
-      class="fixed inset-0 pointer-events-none overflow-hidden -z-10"
-      aria-hidden="true"
-    >
-      <!-- Clouds -->
-      <div class="cloud cloud-one">
-        <span class="material-symbols-outlined text-[90px] text-white">
-          cloud
-        </span>
-      </div>
-
-      <div class="cloud cloud-two">
-        <span class="material-symbols-outlined text-[120px] text-white">
-          cloud
-        </span>
-      </div>
-
-      <!-- Flying airplane -->
-      <div class="plane absolute top-[18%] left-0 flex items-center gap-3">
-        <div class="flight-line"></div>
-
-        <span
-          class="material-symbols-outlined text-4xl text-blue-600 rotate-[-10deg]"
-        >
-          flight
-        </span>
-      </div>
-    </div>
-
-    <!-- React App -->
-    <div id="root" class="page-enter"></div>
-
-    <!-- Scroll indicator -->
-    <div
-      class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-    >
-      <div
-        class="flex flex-col items-center gap-1 text-gray-500 text-xs"
-      >
-        <span>Explore</span>
-
-        <span
-          class="scroll-dot material-symbols-outlined text-lg"
-        >
-          keyboard_arrow_down
-        </span>
-      </div>
-    </div>
+  <body>
+    <div id="root"></div>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>
