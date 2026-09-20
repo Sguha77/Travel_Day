@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Trip } from "../types";
+import React from "react";
 import {
-  Check,
-  ExternalLink,
-  RefreshCw,
-  Plus,
-  ChevronRight,
-  MapPin,
-  Clock3,
   Plane,
   Train,
+  Clock,
+  AlertTriangle,
+  Navigation,
+  CheckCircle2,
+  MapPin,
+  Ticket,
+  Plus,
+  RefreshCw,
+  Share2,
   Sparkles,
+  Luggage,
+  ShieldCheck,
+  ArrowRight,
 } from "lucide-react";
+
+import { Trip, TimelineStep } from "../types";
 
 interface TimelineViewProps {
   trip: Trip;
@@ -28,434 +34,503 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
   onToggleStepComplete,
   onAddCustomNote,
 }) => {
-  const [showAddNote, setShowAddNote] = useState(false);
-  const [noteText, setNoteText] = useState("");
+  const isFlight = trip.eventType === "flight";
 
-  const handleNoteSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!noteText.trim()) return;
-
-    onAddCustomNote(noteText.trim());
-    setNoteText("");
-    setShowAddNote(false);
-  };
-
-  const completedCount = trip.steps.filter(
-    (step) => step.isCompleted || step.status === "completed"
+  const completedSteps = trip.steps.filter(
+    (step) => step.isCompleted
   ).length;
 
-  const progress = Math.round(
-    (completedCount / trip.steps.length) * 100
-  );
+  const progress =
+    trip.steps.length > 0
+      ? Math.round(
+          (completedSteps / trip.steps.length) * 100
+        )
+      : 0;
+
+  const handleAddNote = () => {
+    const note = window.prompt("Add a travel note");
+
+    if (note?.trim()) {
+      onAddCustomNote(note.trim());
+    }
+  };
+
+  const renderStepIcon = (step: TimelineStep) => {
+    if (step.type === "weather") return "cloud";
+    if (step.type === "alert") return "warning";
+    if (step.type === "transit") return "directions_car";
+    if (step.type === "checkin") return "how_to_reg";
+    if (step.type === "boarding") return "flight_takeoff";
+    if (step.type === "journey")
+      return isFlight ? "flight" : "train";
+    if (step.type === "arrival") return "location_on";
+
+    return step.icon || "event_note";
+  };
 
   return (
-    <main className="relative min-h-screen pt-24 pb-28 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto">
+    <main className="min-h-screen px-4 sm:px-6 pt-24 pb-28">
+      <div className="max-w-5xl mx-auto">
 
         {/* HERO */}
-        <section className="animate-fade-up">
-          <div className="relative overflow-hidden rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-indigo-600 via-violet-600 to-cyan-500 text-white shadow-2xl">
-            {/* Decorative circles */}
-            <div className="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
-            <div className="absolute -bottom-24 left-1/3 w-64 h-64 rounded-full bg-cyan-300/20 blur-3xl" />
 
-            <div className="relative z-10">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-[10px] font-bold uppercase tracking-widest">
-                    {trip.eventType === "flight"
-                      ? "Flight"
-                      : "Train"}
-                  </span>
+        <section className="relative overflow-hidden rounded-[2rem] text-white shadow-2xl animate-fade-up">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-cyan-500" />
 
-                  <span className="text-xs text-white/70">
-                    {trip.identifier}
-                  </span>
+          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+
+          <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-cyan-300/10 blur-3xl" />
+
+          {/* Floating decorative logo */}
+          <div className="absolute right-4 top-4 sm:right-7 sm:top-6 z-20 w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center pointer-events-none animate-float">
+            {isFlight ? (
+              <Plane className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
+            ) : (
+              <Train className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
+            )}
+          </div>
+
+          {/* Content has reserved right-side space */}
+          <div className="relative z-10 p-5 sm:p-8 pr-20 sm:pr-28">
+
+            <div className="flex flex-wrap items-center gap-2 mb-6">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider">
+                <Sparkles className="w-3 h-3" />
+                Smart Journey
+              </span>
+
+              <span className="px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-semibold">
+                {trip.departureDate}
+              </span>
+            </div>
+
+            {/* Route */}
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
+
+              <div className="min-w-0">
+                <div className="text-[10px] sm:text-xs text-white/65 font-semibold uppercase tracking-wider mb-1">
+                  Departure
                 </div>
 
-                <div className="flex items-center gap-1 text-[10px] font-bold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-                  ON TIME
+                <div className="text-3xl sm:text-5xl font-black tracking-tight">
+                  {trip.originCode}
+                </div>
+
+                <div className="text-[10px] sm:text-xs text-white/70 mt-1 truncate">
+                  {trip.origin}
                 </div>
               </div>
 
-              <div className="mt-8 flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-4xl sm:text-5xl font-black tracking-tight">
-                    {trip.originCode}
-                  </p>
+              {/* Duration column */}
+              <div className="flex flex-col items-center min-w-[72px] sm:min-w-[100px]">
+                <div className="flex items-center w-full gap-2">
+                  <div className="h-px flex-1 bg-white/25" />
 
-                  <p className="text-xs text-white/70 mt-1">
-                    {trip.origin.split(",")[0]}
-                  </p>
-                </div>
-
-                <div className="flex-1 flex flex-col items-center pb-2">
-                  <span className="text-[10px] font-semibold text-white/60 mb-2">
-                    {trip.duration}
-                  </span>
-
-                  <div className="relative w-full max-w-32 h-px bg-white/30">
-                    <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white text-indigo-600 flex items-center justify-center shadow-lg float-slow">
-                      {trip.eventType === "flight" ? (
-                        <Plane className="w-4 h-4" />
-                      ) : (
-                        <Train className="w-4 h-4" />
-                      )}
-                    </span>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center">
+                    {isFlight ? (
+                      <Plane className="w-4 h-4 sm:w-5 sm:h-5" />
+                    ) : (
+                      <Train className="w-4 h-4 sm:w-5 sm:h-5" />
+                    )}
                   </div>
+
+                  <div className="h-px flex-1 bg-white/25" />
                 </div>
 
-                <div className="text-right">
-                  <p className="text-4xl sm:text-5xl font-black tracking-tight">
-                    {trip.destinationCode}
-                  </p>
-
-                  <p className="text-xs text-white/70 mt-1">
-                    {trip.destination.split(",")[0]}
-                  </p>
+                <div className="mt-2 text-[10px] sm:text-xs font-semibold text-white/75 whitespace-nowrap">
+                  {trip.duration}
                 </div>
               </div>
 
-              {/* Times */}
-              <div className="mt-7 flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/60">
-                    Departure
-                  </p>
-
-                  <p className="text-lg font-extrabold">
-                    {trip.departureTime}
-                  </p>
+              <div className="text-right min-w-0">
+                <div className="text-[10px] sm:text-xs text-white/65 font-semibold uppercase tracking-wider mb-1">
+                  Arrival
                 </div>
 
-                <div className="text-right">
-                  <p className="text-[10px] uppercase tracking-widest text-white/60">
-                    Arrival
-                  </p>
+                <div className="text-3xl sm:text-5xl font-black tracking-tight">
+                  {trip.destinationCode}
+                </div>
 
-                  <p className="text-lg font-extrabold">
-                    {trip.arrivalTime}
-                  </p>
+                <div className="text-[10px] sm:text-xs text-white/70 mt-1 truncate">
+                  {trip.destination}
                 </div>
               </div>
+            </div>
+
+            {/* Trip information */}
+            <div className="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+              <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                <div className="text-[9px] text-white/55 uppercase tracking-wider">
+                  Departure
+                </div>
+                <div className="text-sm font-bold mt-1">
+                  {trip.departureTime}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                <div className="text-[9px] text-white/55 uppercase tracking-wider">
+                  Arrival
+                </div>
+                <div className="text-sm font-bold mt-1">
+                  {trip.arrivalTime}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                <div className="text-[9px] text-white/55 uppercase tracking-wider">
+                  {isFlight ? "Gate" : "Platform"}
+                </div>
+                <div className="text-sm font-bold mt-1">
+                  {trip.gate}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/10 border border-white/10 p-3">
+                <div className="text-[9px] text-white/55 uppercase tracking-wider">
+                  {isFlight ? "Seat" : "Coach"}
+                </div>
+                <div className="text-sm font-bold mt-1">
+                  {trip.seat}
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <button
+                onClick={onOpenBoardingPass}
+                className="px-4 py-2.5 rounded-xl bg-white text-indigo-700 text-xs font-extrabold flex items-center gap-2 shadow-lg hover:-translate-y-0.5 active:scale-95 transition-transform duration-150"
+              >
+                <Ticket className="w-4 h-4" />
+                View Pass
+              </button>
+
+              <button
+                onClick={onRecalculate}
+                className="px-4 py-2.5 rounded-xl bg-white/10 border border-white/15 text-white text-xs font-bold flex items-center gap-2 hover:bg-white/15 transition-colors duration-150"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Sync Live
+              </button>
+
+              <button className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/15 transition-colors duration-150">
+                <Share2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </section>
 
-        {/* QUICK INFO */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-          {[
-            {
-              label: "Gate",
-              value: trip.gate,
-              icon: "confirmation_number",
-            },
-            {
-              label: "Seat",
-              value: trip.seat,
-              icon: "event_seat",
-            },
-            {
-              label: "Boarding",
-              value: trip.boardingTime,
-              icon: "schedule",
-            },
-            {
-              label: "Terminal",
-              value: trip.terminal,
-              icon: "flight_takeoff",
-            },
-          ].map((item, index) => (
-            <div
-              key={item.label}
-              className={`glass-card premium-card rounded-2xl p-3.5 animate-fade-up animate-fade-up-delay-${index + 1}`}
-            >
-              <span className="material-symbols-outlined text-indigo-500 dark:text-indigo-300 text-lg">
-                {item.icon}
-              </span>
-
-              <p className="text-[9px] uppercase tracking-widest font-bold text-slate-400 mt-2">
-                {item.label}
-              </p>
-
-              <p className="text-sm font-extrabold mt-0.5 truncate">
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </section>
-
         {/* PROGRESS */}
-        <section className="glass-card rounded-2xl p-4 mt-4 animate-fade-up">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-violet-500" />
 
-                <span className="text-xs font-bold">
-                  Journey Progress
-                </span>
+        <section className="mt-5 glass-card rounded-2xl p-4 animate-fade-up">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-xs font-extrabold">
+                Journey progress
               </div>
 
-              <p className="text-[10px] text-slate-500 mt-1">
-                {completedCount} of {trip.steps.length} steps completed
-              </p>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                {completedSteps} of {trip.steps.length} steps completed
+              </div>
             </div>
 
-            <span className="text-sm font-black gradient-text">
+            <span className="text-xs font-black text-indigo-600 dark:text-indigo-300">
               {progress}%
             </span>
           </div>
 
-          <div className="mt-3 h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+          <div className="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 transition-[width] duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
         </section>
 
-        {/* ACTIONS */}
-        <section className="flex gap-3 mt-4">
-          <button
-            onClick={onRecalculate}
-            className="flex-1 py-3 rounded-2xl glass-card font-bold text-xs flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
-          >
-            <RefreshCw className="w-4 h-4 text-indigo-500" />
-            Sync Live
-          </button>
+        {/* QUICK INFO */}
 
-          <button
-            onClick={onOpenBoardingPass}
-            className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
-          >
-            View Pass
-            <ChevronRight className="w-4 h-4" />
-          </button>
+        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+          <div className="glass-card glass-card-hover rounded-2xl p-4 animate-fade-up">
+            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 flex items-center justify-center mb-3">
+              <Clock className="w-4 h-4" />
+            </div>
+
+            <div className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+              Boarding
+            </div>
+
+            <div className="text-sm font-extrabold mt-1">
+              {trip.boardingTime}
+            </div>
+          </div>
+
+          <div className="glass-card glass-card-hover rounded-2xl p-4 animate-fade-up">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 flex items-center justify-center mb-3">
+              <MapPin className="w-4 h-4" />
+            </div>
+
+            <div className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+              Terminal
+            </div>
+
+            <div className="text-sm font-extrabold mt-1">
+              {trip.terminal}
+            </div>
+          </div>
+
+          <div className="glass-card glass-card-hover rounded-2xl p-4 animate-fade-up">
+            <div className="w-9 h-9 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-300 flex items-center justify-center mb-3">
+              <Luggage className="w-4 h-4" />
+            </div>
+
+            <div className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+              Baggage
+            </div>
+
+            <div className="text-sm font-extrabold mt-1">
+              {trip.baggageDrop ? "Drop enabled" : "Carry-on"}
+            </div>
+          </div>
+
+          <div className="glass-card glass-card-hover rounded-2xl p-4 animate-fade-up">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 flex items-center justify-center mb-3">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+
+            <div className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+              Security
+            </div>
+
+            <div className="text-sm font-extrabold mt-1">
+              {trip.tsaPrecheck ? "PreCheck" : "Standard"}
+            </div>
+          </div>
         </section>
 
         {/* TIMELINE */}
-        <section className="mt-8">
-          <div className="flex items-center justify-between mb-5 px-1">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-indigo-500 dark:text-indigo-300">
-                Smart itinerary
-              </p>
 
-              <h2 className="text-xl font-black mt-1">
-                Your journey
-              </h2>
+        <section className="mt-8">
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+                  Your Journey
+                </h2>
+
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Everything you need, exactly when you need it.
+              </p>
             </div>
 
-            <Clock3 className="w-5 h-5 text-slate-400" />
+            <button
+              onClick={onRecalculate}
+              className="hidden sm:flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-300 hover:underline"
+            >
+              Recalculate
+              <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="timeline-line absolute left-[18px] top-3 bottom-6 w-[2px] rounded-full" />
+            <div className="timeline-line hidden sm:block" />
 
             <div className="space-y-4">
               {trip.steps.map((step, index) => {
-                const completed =
-                  step.isCompleted ||
-                  step.status === "completed";
+                const completed = step.isCompleted;
+                const urgent = step.status === "urgent";
+                const active = step.status === "active";
 
                 return (
-                  <div
+                  <article
                     key={step.id}
-                    className="relative pl-12 animate-fade-up"
+                    className="relative pl-0 sm:pl-12 animate-fade-up"
                     style={{
-                      animationDelay: `${index * 70}ms`,
+                      animationDelay: `${Math.min(
+                        index * 55,
+                        500
+                      )}ms`,
                     }}
                   >
-                    {/* Node */}
-                    <button
-                      onClick={() =>
-                        onToggleStepComplete(step.id)
-                      }
-                      className={`timeline-node absolute left-[7px] top-5 w-6 h-6 rounded-full z-10 flex items-center justify-center border-4 border-[var(--app-bg)] ${
+                    <div
+                      className={`hidden sm:flex absolute left-[5px] top-6 w-7 h-7 rounded-full items-center justify-center z-10 ${
                         completed
                           ? "bg-emerald-500 text-white"
-                          : step.status === "urgent"
-                            ? "bg-rose-500 text-white pulse-glow"
-                            : step.status === "active"
-                              ? "bg-indigo-500 text-white pulse-glow"
-                              : "bg-white dark:bg-slate-800 border-2 border-indigo-400"
+                          : urgent
+                          ? "bg-red-500 text-white"
+                          : active
+                          ? "bg-indigo-500 text-white timeline-dot"
+                          : "bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-700 text-indigo-500"
                       }`}
                     >
                       {completed ? (
-                        <Check className="w-3 h-3" />
+                        <CheckCircle2 className="w-3.5 h-3.5" />
                       ) : (
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                        <span className="material-symbols-outlined text-[15px]">
+                          {renderStepIcon(step)}
+                        </span>
                       )}
-                    </button>
+                    </div>
 
-                    {step.type === "alert" ? (
-                      <div className="rounded-2xl p-4 bg-gradient-to-br from-rose-500/10 to-orange-500/5 border border-rose-400/20 shadow-lg">
-                        <div className="flex gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0">
-                            <span className="material-symbols-outlined text-rose-500">
-                              warning
-                            </span>
-                          </div>
-
-                          <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h3 className="font-extrabold text-sm">
-                                {step.title}
-                              </h3>
-
-                              {step.badge && (
-                                <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-rose-500 text-white">
-                                  {step.badge}
-                                </span>
-                              )}
-                            </div>
-
-                            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
-                              {step.subtitle}
-                            </p>
-
-                            {step.detail && (
-                              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-2">
-                                {step.detail}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ) : step.type === "journey" ? (
-                      <div className="glass-card premium-card rounded-2xl p-4">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-2">
-                            <span className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                              <Plane className="w-4 h-4 text-indigo-500" />
-                            </span>
-
-                            <div>
-                              <p className="text-xs font-extrabold">
-                                {step.title}
-                              </p>
-
-                              <p className="text-[10px] text-slate-500">
-                                {step.badge || "On Time"}
-                              </p>
-                            </div>
-                          </div>
-
-                          <span className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500">
-                            ON TIME
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between items-center mb-4">
-                          <div>
-                            <p className="text-2xl font-black">
-                              {trip.departureTime}
-                            </p>
-                            <p className="text-[10px] text-slate-500">
-                              {trip.originCode}
-                            </p>
-                          </div>
-
-                          <div className="flex-1 mx-4 h-px bg-gradient-to-r from-indigo-500/20 via-indigo-500 to-cyan-500/20 relative">
-                            <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--surface-solid)] rounded-full p-1.5">
-                              <Plane className="w-3.5 h-3.5 text-indigo-500" />
-                            </span>
-                          </div>
-
-                          <div className="text-right">
-                            <p className="text-2xl font-black">
-                              {trip.arrivalTime}
-                            </p>
-                            <p className="text-[10px] text-slate-500">
-                              {trip.destinationCode}
-                            </p>
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={onOpenBoardingPass}
-                          className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:shadow-lg hover:shadow-indigo-500/20 transition-all"
+                    <div
+                      className={`glass-card glass-card-hover rounded-2xl p-4 sm:p-5 ${
+                        urgent
+                          ? "border-red-300/50 dark:border-red-500/30"
+                          : ""
+                      } ${
+                        active
+                          ? "ring-1 ring-indigo-500/20"
+                          : ""
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`sm:hidden w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${
+                            completed
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300"
+                              : urgent
+                              ? "bg-red-500/10 text-red-600 dark:text-red-300"
+                              : "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
+                          }`}
                         >
-                          View Boarding Pass
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        className={`glass-card premium-card rounded-2xl p-4 ${
-                          completed ? "opacity-60" : ""
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-                            <span className="material-symbols-outlined text-indigo-500 dark:text-indigo-300">
-                              {step.icon}
+                          {completed ? (
+                            <CheckCircle2 className="w-4 h-4" />
+                          ) : urgent ? (
+                            <AlertTriangle className="w-4 h-4" />
+                          ) : (
+                            <span className="material-symbols-outlined text-[19px]">
+                              {renderStepIcon(step)}
                             </span>
-                          </div>
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <p
-                                className={`text-sm font-extrabold ${
-                                  completed
-                                    ? "line-through text-slate-400"
-                                    : ""
-                                }`}
-                              >
-                                {step.title}
-                              </p>
-
-                              {step.badge && (
-                                <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-300">
-                                  {step.badge}
-                                </span>
-                              )}
-                            </div>
-
-                            {step.subtitle && (
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                                {step.subtitle}
-                              </p>
-                            )}
-                          </div>
-
-                          {step.actionText && (
-                            <button
-                              onClick={() => {
-                                if (
-                                  step.actionType ===
-                                  "boarding_pass"
-                                ) {
-                                  onOpenBoardingPass();
-                                } else if (
-                                  step.actionType === "uber"
-                                ) {
-                                  window.open(
-                                    "https://m.uber.com",
-                                    "_blank"
-                                  );
-                                } else {
-                                  window.open(
-                                    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                                      trip.destination
-                                    )}`,
-                                    "_blank"
-                                  );
-                                }
-                              }}
-                              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold hover:bg-indigo-500/10 transition-colors"
-                            >
-                              {step.actionText}
-                              <ExternalLink className="w-3 h-3" />
-                            </button>
                           )}
                         </div>
+
+                        <div className="flex-1 min-w-0">
+                          {step.time && (
+                            <div className="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 mb-1">
+                              {step.time}
+                            </div>
+                          )}
+
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3
+                              className={`text-sm sm:text-base font-extrabold ${
+                                completed
+                                  ? "line-through opacity-60"
+                                  : ""
+                              }`}
+                            >
+                              {step.title}
+                            </h3>
+
+                            {step.badge && (
+                              <span
+                                className={`px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-wider ${
+                                  step.badgeType === "error"
+                                    ? "bg-red-500/10 text-red-600 dark:text-red-300"
+                                    : step.badgeType ===
+                                      "tertiary"
+                                    ? "bg-violet-500/10 text-violet-600 dark:text-violet-300"
+                                    : "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
+                                }`}
+                              >
+                                {step.badge}
+                              </span>
+                            )}
+                          </div>
+
+                          {step.subtitle && (
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                              {step.subtitle}
+                            </p>
+                          )}
+
+                          {step.detail && (
+                            <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 mt-3">
+                              {step.detail}
+                            </p>
+                          )}
+
+                          <div className="flex flex-wrap gap-2 mt-4">
+                            {step.actionType ===
+                              "boarding_pass" && (
+                              <button
+                                onClick={onOpenBoardingPass}
+                                className="gradient-button px-3 py-2 rounded-xl text-[10px] font-bold flex items-center gap-1.5"
+                              >
+                                <Ticket className="w-3.5 h-3.5" />
+                                {step.actionText ||
+                                  "Boarding Pass"}
+                              </button>
+                            )}
+
+                            {step.actionType ===
+                              "directions" && (
+                              <button className="px-3 py-2 rounded-xl text-[10px] font-bold bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-500/15 transition-colors">
+                                <span className="inline-flex items-center gap-1.5">
+                                  <Navigation className="w-3.5 h-3.5" />
+                                  {step.actionText ||
+                                    "Directions"}
+                                </span>
+                              </button>
+                            )}
+
+                            {step.actionType === "complete" && (
+                              <button
+                                onClick={() =>
+                                  onToggleStepComplete(step.id)
+                                }
+                                className={`px-3 py-2 rounded-xl text-[10px] font-bold flex items-center gap-1.5 transition-colors ${
+                                  completed
+                                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                    : "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/15"
+                                }`}
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+
+                                {completed
+                                  ? "Completed"
+                                  : step.actionText ||
+                                    "Mark Complete"}
+                              </button>
+                            )}
+
+                            {!step.actionType &&
+                              step.type !== "weather" && (
+                                <button
+                                  onClick={() =>
+                                    onToggleStepComplete(step.id)
+                                  }
+                                  className={`px-3 py-2 rounded-xl text-[10px] font-bold ${
+                                    completed
+                                      ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                                  }`}
+                                >
+                                  {completed
+                                    ? "Completed"
+                                    : "Mark complete"}
+                                </button>
+                              )}
+                          </div>
+                        </div>
+
+                        {step.time && (
+                          <div className="hidden sm:block text-right shrink-0">
+                            <div className="text-[10px] font-bold text-slate-400">
+                              TIME
+                            </div>
+
+                            <div className="text-xs font-extrabold mt-1">
+                              {step.time}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </article>
                 );
               })}
             </div>
@@ -463,56 +538,15 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
         </section>
 
         {/* ADD NOTE */}
-        <section className="mt-8">
-          {showAddNote ? (
-            <form
-              onSubmit={handleNoteSubmit}
-              className="glass-card rounded-2xl p-4 space-y-3"
-            >
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-indigo-500" />
 
-                <p className="text-xs font-bold">
-                  Add personal reminder
-                </p>
-              </div>
-
-              <input
-                value={noteText}
-                onChange={(e) =>
-                  setNoteText(e.target.value)
-                }
-                placeholder="e.g. Buy water after security"
-                className="w-full rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-indigo-500 outline-none px-3 py-3 text-sm transition-all"
-                autoFocus
-              />
-
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddNote(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-500"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold"
-                >
-                  Add Step
-                </button>
-              </div>
-            </form>
-          ) : (
-            <button
-              onClick={() => setShowAddNote(true)}
-              className="w-full py-4 rounded-2xl border border-dashed border-indigo-300/50 dark:border-indigo-500/30 text-xs font-bold text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500/5 transition-all flex items-center justify-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Add Personal Note
-            </button>
-          )}
+        <section className="mt-6 glass-card rounded-2xl p-4 border-dashed animate-fade-up">
+          <button
+            onClick={handleAddNote}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors duration-150"
+          >
+            <Plus className="w-4 h-4" />
+            Add personal travel note
+          </button>
         </section>
       </div>
     </main>
