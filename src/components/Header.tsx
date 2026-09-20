@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
-import { Trip } from '../types';
-import { Menu, ChevronDown, Sparkles, Sun, Moon, Plus } from 'lucide-react';
+import React, { useState } from "react";
+import { Trip } from "../types";
+import {
+  Menu,
+  ChevronDown,
+  Sparkles,
+  Sun,
+  Moon,
+  Plus,
+  Plane,
+} from "lucide-react";
 
 interface HeaderProps {
   trips: Trip[];
@@ -26,116 +34,151 @@ export const Header: React.FC<HeaderProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-[#fcf8fb] dark:bg-[#1b1b1d] border-b border-[#c1c6d7] dark:border-[#414755] flex items-center justify-between px-4 h-12 shadow-xs transition-colors">
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onOpenSettings}
-          className="hover:bg-[#f6f3f5] dark:hover:bg-[#28282a] transition-all active:scale-95 flex items-center justify-center p-1.5 rounded-full text-[#414755] dark:text-[#c1c6d7]"
-          title="Settings & Menu"
-        >
-          <span className="material-symbols-outlined text-xl">menu</span>
-        </button>
-
-        {/* Brand logo & active trip switcher */}
-        <div className="relative">
+    <header className="fixed top-0 left-0 right-0 z-40 px-3 sm:px-5 pt-3">
+      <div className="glass-card rounded-2xl h-14 px-3 sm:px-5 flex items-center justify-between">
+        {/* Brand */}
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-1.5 text-left font-bold text-xl text-[#0058bc] dark:text-[#adc6ff] tracking-tight hover:opacity-90 transition-opacity"
+            onClick={onOpenSettings}
+            className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 hover:scale-105 transition-all"
           >
-            <span>Travel Day</span>
-            {activeTrip && (
-              <span className="hidden sm:inline-flex items-center gap-1 ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-[#d8e2ff] dark:bg-[#004493] text-[#001a41] dark:text-[#d8e2ff]">
-                {activeTrip.identifier} ({activeTrip.originCode}➔{activeTrip.destinationCode})
-                <ChevronDown className="w-3.5 h-3.5" />
-              </span>
-            )}
+            <Menu className="w-4 h-4" />
           </button>
 
-          {/* Active trips dropdown */}
-          {dropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-[#212123] border border-[#c1c6d7] dark:border-[#414755] rounded-xl shadow-lg py-2 z-50">
-              <div className="px-3 py-1.5 text-[11px] font-bold text-[#717786] dark:text-[#8b91a0] uppercase tracking-wider">
-                My Journeys
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-2"
+            >
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-cyan-500 flex items-center justify-center text-white shadow-lg">
+                <Plane className="w-4 h-4" />
               </div>
-              {trips.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => {
-                    onSelectTrip(t.id);
-                    setDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between hover:bg-[#f6f3f5] dark:hover:bg-[#28282a] transition-colors ${
-                    activeTrip?.id === t.id ? 'font-bold text-[#0058bc] dark:text-[#adc6ff] bg-[#f0edef] dark:bg-[#2f2f32]' : 'text-[#1b1b1d] dark:text-[#f3f0f2]'
-                  }`}
-                >
-                  <div className="truncate">
-                    <div className="truncate">{t.identifier} • {t.originCode} ➔ {t.destinationCode}</div>
-                    <div className="text-xs text-[#717786] dark:text-[#8b91a0] font-normal">{t.departureDate} at {t.departureTime}</div>
+
+              <div className="text-left">
+                <div className="text-sm sm:text-base font-extrabold tracking-tight gradient-text">
+                  Travel Day
+                </div>
+
+                {activeTrip && (
+                  <div className="hidden sm:block text-[9px] text-slate-500 dark:text-slate-400 font-medium">
+                    {activeTrip.originCode} → {activeTrip.destinationCode}
                   </div>
-                  {activeTrip?.id === t.id && (
-                    <span className="w-2 h-2 rounded-full bg-[#0058bc] dark:bg-[#adc6ff]"></span>
-                  )}
+                )}
+              </div>
+
+              <ChevronDown
+                className={`w-4 h-4 text-slate-400 transition-transform ${
+                  dropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute top-12 left-0 w-72 glass-card rounded-2xl p-2 shadow-2xl animate-fade-up">
+                <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  My Journeys
+                </div>
+
+                {trips.map((trip) => (
+                  <button
+                    key={trip.id}
+                    onClick={() => {
+                      onSelectTrip(trip.id);
+                      setDropdownOpen(false);
+                    }}
+                    className={`w-full text-left p-3 rounded-xl transition-all ${
+                      activeTrip?.id === trip.id
+                        ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
+                        : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-sm font-bold">
+                          {trip.identifier}
+                        </div>
+
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {trip.originCode} → {trip.destinationCode}
+                        </div>
+                      </div>
+
+                      {activeTrip?.id === trip.id && (
+                        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                      )}
+                    </div>
+                  </button>
+                ))}
+
+                <div className="h-px bg-slate-200/70 dark:bg-slate-700/70 my-2" />
+
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    onOpenAddTrip();
+                  }}
+                  className="w-full p-3 rounded-xl flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500/10 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add New Trip
                 </button>
-              ))}
-
-              <div className="border-t border-[#c1c6d7] dark:border-[#414755] my-1"></div>
-
-              <button
-                onClick={() => {
-                  setDropdownOpen(false);
-                  onOpenAddTrip();
-                }}
-                className="w-full text-left px-3 py-2 text-sm text-[#0058bc] dark:text-[#adc6ff] font-medium hover:bg-[#f6f3f5] dark:hover:bg-[#28282a] flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add New Trip</span>
-              </button>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Action buttons on the right */}
-      <div className="flex items-center gap-2">
-        {/* Navigation items for desktop */}
-        <nav className="hidden md:flex items-center gap-4 mr-2">
+        {/* Desktop actions */}
+        <div className="flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-2 mr-2">
+            <button
+              onClick={onOpenAddTrip}
+              className="px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 transition-all"
+            >
+              + Add Trip
+            </button>
+
+            <button
+              onClick={onOpenAssistant}
+              className="px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 text-violet-600 dark:text-violet-300 hover:bg-violet-500/10 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              AI Companion
+            </button>
+          </nav>
+
+          {/* Theme Toggle */}
           <button
-            onClick={onOpenAddTrip}
-            className="text-xs font-semibold flex items-center gap-1.5 text-[#0058bc] dark:text-[#adc6ff] hover:underline"
+            onClick={onToggleDarkMode}
+            aria-label="Toggle dark mode"
+            className="relative w-12 h-8 rounded-full p-1 bg-slate-200 dark:bg-slate-800 border border-slate-300/50 dark:border-slate-700 transition-all duration-500 hover:scale-105"
           >
-            <span className="material-symbols-outlined text-base">add_circle</span>
-            <span>Add Trip</span>
+            <span
+              className={`absolute top-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md transition-all duration-500 ${
+                darkMode
+                  ? "translate-x-4 bg-gradient-to-br from-indigo-500 to-violet-600"
+                  : "translate-x-0 bg-white"
+              }`}
+            >
+              {darkMode ? (
+                <Moon className="w-3.5 h-3.5 text-white" />
+              ) : (
+                <Sun className="w-3.5 h-3.5 text-orange-500" />
+              )}
+            </span>
           </button>
+
+          {/* Avatar */}
           <button
-            onClick={onOpenAssistant}
-            className="text-xs font-semibold flex items-center gap-1.5 text-[#006b27] dark:text-[#53e16f] hover:underline"
+            onClick={onOpenSettings}
+            className="w-9 h-9 rounded-xl overflow-hidden border border-white/50 dark:border-slate-700 shadow-md hover:scale-105 transition-transform"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>AI Companion</span>
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+              alt="User profile"
+              className="w-full h-full object-cover"
+            />
           </button>
-        </nav>
-
-        {/* Dark mode toggle */}
-        <button
-          onClick={onToggleDarkMode}
-          className="p-1.5 rounded-full hover:bg-[#f6f3f5] dark:hover:bg-[#28282a] text-[#414755] dark:text-[#c1c6d7] transition-colors"
-          title="Toggle Theme"
-        >
-          {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-        </button>
-
-        {/* Profile Avatar */}
-        <button
-          onClick={onOpenSettings}
-          className="hover:bg-[#f6f3f5] dark:hover:bg-[#28282a] transition-all rounded-full overflow-hidden h-8 w-8 border border-[#c1c6d7] dark:border-[#414755] flex-shrink-0"
-          title="Profile & Settings"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-            alt="User profile"
-            className="w-full h-full object-cover"
-          />
-        </button>
+        </div>
       </div>
     </header>
   );
