@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Trip, EventType, TransitPreference } from './types';
-import { INITIAL_TRIPS } from './data/mockTrips';
-import { generateTimelineForTrip } from './utils/timelineGenerator';
-import { Header } from './components/Header';
-import { BottomNav } from './components/BottomNav';
-import { TimelineView } from './components/TimelineView';
-import { AddTripForm } from './components/AddTripForm';
-import { ProcessingScreen } from './components/ProcessingScreen';
-import { BoardingPassModal } from './components/BoardingPassModal';
-import { AIAssistantDrawer } from './components/AIAssistantDrawer';
-import { SettingsModal } from './components/SettingsModal';
+import React, { useEffect, useState } from "react";
+import { Trip, EventType, TransitPreference } from "./types";
+import { INITIAL_TRIPS } from "./data/mockTrips";
+import { generateTimelineForTrip } from "./utils/timelineGenerator";
+import { Header } from "./components/Header";
+import { BottomNav } from "./components/BottomNav";
+import { TimelineView } from "./components/TimelineView";
+import { AddTripForm } from "./components/AddTripForm";
+import { ProcessingScreen } from "./components/ProcessingScreen";
+import { BoardingPassModal } from "./components/BoardingPassModal";
+import { AIAssistantDrawer } from "./components/AIAssistantDrawer";
+import { SettingsModal } from "./components/SettingsModal";
 
 export default function App() {
   const [trips, setTrips] = useState<Trip[]>(() => {
-    const saved = localStorage.getItem('travel_day_trips');
+    const saved = localStorage.getItem("travel_day_trips");
+
     if (saved) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error('Failed to parse saved trips', e);
+        console.error("Failed to parse saved trips", e);
       }
     }
+
     return INITIAL_TRIPS;
   });
 
@@ -28,35 +30,46 @@ export default function App() {
     return trips[0]?.id || INITIAL_TRIPS[0].id;
   });
 
-  const [activeTab, setActiveTab] = useState<'itinerary' | 'add' | 'pass' | 'ai' | 'settings'>('itinerary');
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [showBoardingPassModal, setShowBoardingPassModal] = useState<boolean>(false);
-  const [showAssistantDrawer, setShowAssistantDrawer] = useState<boolean>(false);
-  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<
+    "itinerary" | "add" | "pass" | "ai" | "settings"
+  >("itinerary");
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showBoardingPassModal, setShowBoardingPassModal] = useState(false);
+  const [showAssistantDrawer, setShowAssistantDrawer] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem('travel_day_theme') === 'dark';
+    return localStorage.getItem("travel_day_theme") === "dark";
   });
 
-  // Sync trips to localStorage
+  /* Save trips */
   useEffect(() => {
-    localStorage.setItem('travel_day_trips', JSON.stringify(trips));
+    localStorage.setItem("travel_day_trips", JSON.stringify(trips));
   }, [trips]);
 
-  // Sync theme
+  /* Apply theme */
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('travel_day_theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('travel_day_theme', 'light');
-    }
+    const root = document.documentElement;
+
+    root.classList.toggle("dark", darkMode);
+    root.classList.toggle("light", !darkMode);
+
+    localStorage.setItem(
+      "travel_day_theme",
+      darkMode ? "dark" : "light"
+    );
   }, [darkMode]);
 
-  const activeTrip = trips.find((t) => t.id === activeTripId) || trips[0] || null;
+  const toggleTheme = () => {
+    setDarkMode((current) => !current);
+  };
 
-  // Handler for adding a new trip
+  const activeTrip =
+    trips.find((t) => t.id === activeTripId) ||
+    trips[0] ||
+    null;
+
   const handleAddTrip = (params: {
     origin: string;
     destination: string;
@@ -86,146 +99,180 @@ export default function App() {
     }, 500);
   };
 
-  // Handler for step completion toggling
   const handleToggleStepComplete = (stepId: string) => {
     if (!activeTrip) return;
+
     setTrips((prev) =>
       prev.map((t) => {
-        if (t.id === activeTrip.id) {
-          const updatedSteps = t.steps.map((s) => {
-            if (s.id === stepId) {
-              const isComp = !s.isCompleted;
-              return { ...s, isCompleted: isComp, status: isComp ? ('completed' as const) : ('upcoming' as const) };
-            }
-            return s;
-          });
-          return { ...t, steps: updatedSteps };
-        }
-        return t;
+        if (t.id !== activeTrip.id) return t;
+
+        return {
+          ...t,
+          steps: t.steps.map((s) => {
+            if (s.id !== stepId) return s;
+
+            const completed = !s.isCompleted;
+
+            return {
+              ...s,
+              isCompleted: completed,
+              status: completed ? "completed" : "upcoming",
+            };
+          }),
+        };
       })
     );
   };
 
-  // Handler for adding a custom note to active trip's timeline
   const handleAddCustomNote = (text: string) => {
     if (!activeTrip) return;
+
     const newStep = {
       id: `custom-${Date.now()}`,
-      type: 'custom' as const,
+      type: "custom" as const,
       title: text,
-      subtitle: 'Personal travel note',
-      status: 'upcoming' as const,
-      icon: 'note_add',
+      subtitle: "Personal travel note",
+      status: "upcoming" as const,
+      icon: "note_add",
       isCompleted: false,
     };
 
     setTrips((prev) =>
-      prev.map((t) => {
-        if (t.id === activeTrip.id) {
-          return { ...t, steps: [...t.steps, newStep] };
-        }
-        return t;
-      })
+      prev.map((t) =>
+        t.id === activeTrip.id
+          ? { ...t, steps: [...t.steps, newStep] }
+          : t
+      )
     );
   };
 
-  // Handle BottomNav tab changes
-  const handleTabChange = (tab: 'itinerary' | 'add' | 'pass' | 'ai' | 'settings') => {
+  const handleTabChange = (
+    tab: "itinerary" | "add" | "pass" | "ai" | "settings"
+  ) => {
     setActiveTab(tab);
-    if (tab === 'pass') {
+
+    if (tab === "pass") {
       setShowBoardingPassModal(true);
-    } else if (tab === 'ai') {
+    } else if (tab === "ai") {
       setShowAssistantDrawer(true);
-    } else if (tab === 'settings') {
+    } else if (tab === "settings") {
       setShowSettingsModal(true);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#fcf8fb] dark:bg-[#1b1b1d] text-[#1b1b1d] dark:text-[#f3f0f2] font-['Inter',sans-serif] transition-colors">
-      {/* Top Header */}
-      <Header
-        trips={trips}
-        activeTrip={activeTrip}
-        onSelectTrip={(id) => {
-          setActiveTripId(id);
-          setActiveTab('itinerary');
-        }}
-        onOpenAddTrip={() => setActiveTab('add')}
-        onOpenAssistant={() => setShowAssistantDrawer(true)}
-        onOpenSettings={() => setShowSettingsModal(true)}
-        darkMode={darkMode}
-        onToggleDarkMode={() => setDarkMode(!darkMode)}
+    <div className="app-background min-h-screen text-slate-900 dark:text-white transition-colors duration-500">
+      {/* Animated ambient lights */}
+      <div className="ambient-orb orb-one" />
+      <div className="ambient-orb orb-two" />
+      <div className="ambient-orb orb-three" />
+
+      <div className="relative z-10">
+        <Header
+          trips={trips}
+          activeTrip={activeTrip}
+          onSelectTrip={(id) => {
+            setActiveTripId(id);
+            setActiveTab("itinerary");
+          }}
+          onOpenAddTrip={() => setActiveTab("add")}
+          onOpenAssistant={() => setShowAssistantDrawer(true)}
+          onOpenSettings={() => setShowSettingsModal(true)}
+          darkMode={darkMode}
+          onToggleDarkMode={toggleTheme}
+        />
+
+        {isProcessing ? (
+          <ProcessingScreen
+            onComplete={() => {
+              setIsProcessing(false);
+              setActiveTab("itinerary");
+            }}
+          />
+        ) : activeTab === "add" ? (
+          <AddTripForm onSubmitTrip={handleAddTrip} />
+        ) : activeTrip ? (
+          <TimelineView
+            trip={activeTrip}
+            onOpenBoardingPass={() =>
+              setShowBoardingPassModal(true)
+            }
+            onRecalculate={() => setIsProcessing(true)}
+            onToggleStepComplete={handleToggleStepComplete}
+            onAddCustomNote={handleAddCustomNote}
+          />
+        ) : (
+          <div className="pt-32 text-center px-4">
+            <div className="glass-card rounded-3xl p-10 max-w-md mx-auto">
+              <span className="material-symbols-outlined text-5xl gradient-text">
+                flight_takeoff
+              </span>
+
+              <h2 className="text-2xl font-extrabold mt-4">
+                Your journey starts here
+              </h2>
+
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                Create your first trip and let Travel Day build your timeline.
+              </p>
+
+              <button
+                onClick={() => setActiveTab("add")}
+                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white font-bold shadow-lg hover:scale-[1.03] active:scale-95 transition-all"
+              >
+                Create Your First Trip
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <BottomNav
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
       />
 
-      {/* Main View Area */}
-      {isProcessing ? (
-        <ProcessingScreen
-          onComplete={() => {
-            setIsProcessing(false);
-            setActiveTab('itinerary');
-          }}
-        />
-      ) : activeTab === 'add' ? (
-        <AddTripForm onSubmitTrip={handleAddTrip} />
-      ) : activeTrip ? (
-        <TimelineView
-          trip={activeTrip}
-          onOpenBoardingPass={() => setShowBoardingPassModal(true)}
-          onRecalculate={() => setIsProcessing(true)}
-          onToggleStepComplete={handleToggleStepComplete}
-          onAddCustomNote={handleAddCustomNote}
-        />
-      ) : (
-        <div className="pt-24 text-center px-4">
-          <p className="text-sm text-[#717786]">No active trips found.</p>
-          <button
-            onClick={() => setActiveTab('add')}
-            className="mt-4 px-4 py-2 bg-[#0058bc] text-white rounded-lg text-xs font-bold"
-          >
-            Create Your First Trip
-          </button>
-        </div>
-      )}
-
-      {/* Bottom Navigation for Mobile */}
-      <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
-
-      {/* Boarding Pass Modal */}
       {showBoardingPassModal && activeTrip && (
         <BoardingPassModal
           trip={activeTrip}
           onClose={() => {
             setShowBoardingPassModal(false);
-            if (activeTab === 'pass') setActiveTab('itinerary');
+
+            if (activeTab === "pass") {
+              setActiveTab("itinerary");
+            }
           }}
         />
       )}
 
-      {/* AI Travel Assistant Drawer */}
       {showAssistantDrawer && (
         <AIAssistantDrawer
           trip={activeTrip}
           onClose={() => {
             setShowAssistantDrawer(false);
-            if (activeTab === 'ai') setActiveTab('itinerary');
+
+            if (activeTab === "ai") {
+              setActiveTab("itinerary");
+            }
           }}
         />
       )}
 
-      {/* Settings Modal */}
       {showSettingsModal && (
         <SettingsModal
           onClose={() => {
             setShowSettingsModal(false);
-            if (activeTab === 'settings') setActiveTab('itinerary');
+
+            if (activeTab === "settings") {
+              setActiveTab("itinerary");
+            }
           }}
           darkMode={darkMode}
-          onToggleDarkMode={() => setDarkMode(!darkMode)}
+          onToggleDarkMode={toggleTheme}
           onResetDefaultTrips={() => {
             setTrips(INITIAL_TRIPS);
             setActiveTripId(INITIAL_TRIPS[0].id);
-            setActiveTab('itinerary');
+            setActiveTab("itinerary");
           }}
         />
       )}
