@@ -1,321 +1,285 @@
 ```html
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Travel Day - Smart Journey Companion</title>
+    <title>Travel Day — Smart Journey Companion</title>
 
-    <!-- Fonts -->
+    <!-- Premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
     <!-- Material Symbols -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
       rel="stylesheet"
     />
 
+    <!-- Premium theme variables -->
     <style>
       :root {
-        --navy: #102a43;
-        --blue: #1683e8;
-        --sky: #eaf6ff;
-        --orange: #ff8a4c;
-        --yellow: #ffc857;
-        --cream: #fffaf5;
-        --text: #102a43;
-        --muted: #627d98;
-        --white: #ffffff;
+        --background: #07111f;
+        --background-soft: #0b1728;
+        --surface: #101d30;
+        --surface-light: #16263c;
+
+        --primary: #4f8cff;
+        --primary-light: #79aaff;
+        --secondary: #25d9c4;
+        --accent: #f4c76b;
+
+        --text-primary: #f8fafc;
+        --text-secondary: #a9b7ca;
+        --text-muted: #718198;
+
+        --border: rgba(255, 255, 255, 0.08);
+        --glass: rgba(16, 29, 48, 0.72);
+
+        --shadow:
+          0 20px 60px rgba(0, 0, 0, 0.35);
+
+        --gradient-primary:
+          linear-gradient(135deg, #4f8cff 0%, #25d9c4 100%);
+
+        --gradient-premium:
+          linear-gradient(
+            135deg,
+            #111f35 0%,
+            #0c192b 45%,
+            #07111f 100%
+          );
       }
 
       * {
-        margin: 0;
-        padding: 0;
         box-sizing: border-box;
+      }
+
+      html {
         scroll-behavior: smooth;
+        background: var(--background);
       }
 
       body {
-        font-family: "Inter", sans-serif;
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+
         background:
           radial-gradient(
-            circle at 10% 10%,
-            rgba(22, 131, 232, 0.12),
+            circle at 15% 10%,
+            rgba(79, 140, 255, 0.13),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 85% 20%,
+            rgba(37, 217, 196, 0.09),
             transparent 28%
           ),
           radial-gradient(
-            circle at 90% 20%,
-            rgba(255, 138, 76, 0.13),
-            transparent 25%
+            circle at 50% 100%,
+            rgba(79, 140, 255, 0.06),
+            transparent 35%
           ),
-          var(--cream);
+          var(--background);
 
-        color: var(--text);
-        min-height: 100vh;
-        overflow-x: hidden;
+        color: var(--text-primary);
+
+        font-family: "DM Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
-
-      /* Soft decorative circles */
-
-      body::before,
-      body::after {
-        content: "";
-        position: fixed;
-        width: 350px;
-        height: 350px;
-        border-radius: 50%;
-        filter: blur(90px);
-        pointer-events: none;
-        z-index: -1;
-      }
-
-      body::before {
-        background: rgba(22, 131, 232, 0.12);
-        top: -150px;
-        left: -120px;
-      }
-
-      body::after {
-        background: rgba(255, 138, 76, 0.1);
-        right: -120px;
-        bottom: -150px;
-      }
-
-      /* Root */
 
       #root {
         min-height: 100vh;
       }
 
-      /* Selection */
-
-      ::selection {
-        background: var(--blue);
-        color: white;
-      }
-
-      /* Scrollbar */
-
+      /* Premium scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
       }
 
       ::-webkit-scrollbar-track {
-        background: #f4f8fb;
+        background: var(--background);
       }
 
       ::-webkit-scrollbar-thumb {
-        background: #9ccff4;
-        border-radius: 20px;
+        background: linear-gradient(
+          180deg,
+          var(--primary),
+          var(--secondary)
+        );
+        border-radius: 999px;
       }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--blue);
+      ::selection {
+        background: rgba(79, 140, 255, 0.3);
+        color: white;
       }
 
-      /* Common glass effect */
+      /* Material icons */
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 500,
+          "GRAD" 0,
+          "opsz" 24;
+      }
 
+      /* Glass surfaces */
       .glass {
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--glass);
+        border: 1px solid var(--border);
         backdrop-filter: blur(18px);
         -webkit-backdrop-filter: blur(18px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 15px 40px rgba(16, 42, 67, 0.08);
+        box-shadow: var(--shadow);
       }
 
-      /* Cards */
-
-      .travel-card {
-        background: white;
-        border: 1px solid #e8f0f6;
-        border-radius: 24px;
-        box-shadow: 0 12px 35px rgba(16, 42, 67, 0.07);
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease,
-          border-color 0.3s ease;
-      }
-
-      .travel-card:hover {
-        transform: translateY(-6px);
-        border-color: #b9ddf8;
-        box-shadow: 0 20px 45px rgba(16, 42, 67, 0.12);
-      }
-
-      /* Primary button */
-
-      .primary-button {
-        background: linear-gradient(
-          135deg,
-          #1683e8,
-          #0875d1
-        );
-
-        color: white;
-        border: none;
-        border-radius: 14px;
-        padding: 13px 22px;
-        font-weight: 600;
-
-        box-shadow:
-          0 8px 20px rgba(22, 131, 232, 0.25);
-
-        transition: all 0.25s ease;
-      }
-
-      .primary-button:hover {
-        transform: translateY(-2px);
-        box-shadow:
-          0 12px 25px rgba(22, 131, 232, 0.35);
-      }
-
-      /* Secondary button */
-
-      .secondary-button {
-        background: white;
-        color: var(--navy);
-        border: 1px solid #dbe9f3;
-        border-radius: 14px;
-        padding: 12px 20px;
-        font-weight: 600;
-        transition: all 0.25s ease;
-      }
-
-      .secondary-button:hover {
-        background: var(--sky);
-        border-color: #b8dcf5;
-      }
-
-      /* Accent badge */
-
-      .travel-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 7px 12px;
-        border-radius: 999px;
-
-        background: #fff1e8;
-        color: #d86127;
-
-        font-size: 12px;
-        font-weight: 700;
-      }
-
-      /* Icon containers */
-
-      .blue-icon {
-        background: #e7f4ff;
-        color: #1683e8;
-      }
-
-      .orange-icon {
-        background: #fff0e7;
-        color: #ef762f;
-      }
-
-      .yellow-icon {
-        background: #fff7d9;
-        color: #d99b00;
-      }
-
-      .green-icon {
-        background: #e8f8ef;
-        color: #23945a;
-      }
-
-      /* Destination image */
-
-      .destination-image {
-        overflow: hidden;
-        border-radius: 20px;
-      }
-
-      .destination-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.6s ease;
-      }
-
-      .travel-card:hover .destination-image img {
-        transform: scale(1.06);
-      }
-
-      /* Gradient hero */
-
-      .hero-gradient {
+      /* Premium card */
+      .premium-card {
         background:
           linear-gradient(
-            120deg,
-            rgba(16, 42, 67, 0.96),
-            rgba(20, 83, 130, 0.9)
-          );
+            145deg,
+            rgba(255, 255, 255, 0.06),
+            rgba(255, 255, 255, 0.015)
+          ),
+          var(--surface);
+
+        border: 1px solid var(--border);
+        border-radius: 20px;
+
+        box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+        transition:
+          transform 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
-      /* Floating travel element */
+      .premium-card:hover {
+        transform: translateY(-3px);
 
-      .floating-travel {
-        animation: floating 4s ease-in-out infinite;
+        border-color: rgba(79, 140, 255, 0.28);
+
+        box-shadow:
+          0 18px 50px rgba(0, 0, 0, 0.3),
+          0 0 30px rgba(79, 140, 255, 0.05);
       }
 
-      @keyframes floating {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-
-        50% {
-          transform: translateY(-8px);
-        }
+      /* Primary gradient text */
+      .gradient-text {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
 
-      /* Fade entrance */
+      /* Premium button */
+      .premium-button {
+        background: var(--gradient-primary);
+        color: #ffffff;
 
-      .fade-up {
-        animation: fadeUp 0.7s ease both;
+        border: none;
+        border-radius: 12px;
+
+        padding: 12px 20px;
+
+        font-family: "DM Sans", sans-serif;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        box-shadow:
+          0 8px 25px rgba(79, 140, 255, 0.2);
+
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(18px);
-        }
+      .premium-button:hover {
+        transform: translateY(-2px);
 
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        box-shadow:
+          0 12px 30px rgba(79, 140, 255, 0.3);
+      }
+
+      /* Soft accent glow */
+      .glow-blue {
+        box-shadow:
+          0 0 0 1px rgba(79, 140, 255, 0.12),
+          0 0 35px rgba(79, 140, 255, 0.08);
+      }
+
+      .glow-teal {
+        box-shadow:
+          0 0 0 1px rgba(37, 217, 196, 0.12),
+          0 0 35px rgba(37, 217, 196, 0.08);
+      }
+
+      /* Smooth transitions */
+      button,
+      a,
+      input,
+      select,
+      textarea {
+        transition: all 0.2s ease;
+      }
+
+      /* Inputs */
+      input,
+      textarea,
+      select {
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        border-radius: 12px;
+        outline: none;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: rgba(79, 140, 255, 0.55);
+        box-shadow:
+          0 0 0 3px rgba(79, 140, 255, 0.08);
+      }
+
+      /* Subtle page noise */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.025;
+
+        background-image:
+          url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
       }
 
       /* Mobile */
-
       @media (max-width: 768px) {
         body {
-          background: var(--cream);
+          background:
+            radial-gradient(
+              circle at 50% 0%,
+              rgba(79, 140, 255, 0.12),
+              transparent 35%
+            ),
+            var(--background);
         }
 
-        .travel-card {
-          border-radius: 20px;
-        }
-      }
-
-      /* Accessibility */
-
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          animation: none !important;
-          transition: none !important;
-          scroll-behavior: auto !important;
+        .premium-card {
+          border-radius: 16px;
         }
       }
     </style>
