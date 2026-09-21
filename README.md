@@ -1,8 +1,9 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
-
 # ✈️ Travel Day — Smart Journey Companion
+<p align="center">
+  <a href="https://travelplaners.netlify.app" target="_blank">
+    <img src="assests/preview.png" alt="Travel Day Preview" width="700"/>
+  </a>
+</p>
 
 > A modern, intelligent travel companion that turns a flight or train journey into a clear, step-by-step travel timeline.
 
