@@ -109,16 +109,17 @@ Travelers can add custom notes directly to their journey.
 
 For example:
 
-```text
+```text 
 Remember to collect luggage
 Buy snacks before boarding
 Call family after landing
 Check hotel booking
 
 These notes become part of the journey timeline.
+```
 
 🌗 Light & Dark Mode
-
+```text
 Travel Day includes a complete light/dark theme system.
 
 Features include:
@@ -130,7 +131,7 @@ Persistent theme preference
 Responsive theme-aware components
 
 The selected theme is stored locally in the browser.
-
+```
 💾 Local Data Persistence
 
 Travel Day currently uses browser localStorage to persist application data.
@@ -142,6 +143,8 @@ Completed journey steps
 Theme preference
 
 No backend database is required for the current version.
+
+---
 
 🎨 UI & Design
 
@@ -164,7 +167,10 @@ The interface is designed around one central question:
 
 Instead of presenting travel information as static data, Travel Day organizes the information around the traveler's journey timeline.
 
+---
+
 🛠️ Tech Stack
+
 Technology	Purpose
 React	User interface
 TypeScript	Type-safe development
@@ -173,7 +179,12 @@ Tailwind CSS	Styling
 Lucide React	Interface icons
 Material Symbols	Timeline icons
 LocalStorage	Client-side persistence
+
+---
+
 📁 Project Structure
+
+```text
 Travel_Day/
 │
 ├── public/
@@ -205,7 +216,11 @@ Travel_Day/
 ├── package.json
 ├── tsconfig.json
 └── vite.config.ts
+```
+---
+
 🚀 Getting Started
+
 1. Clone the Repository
 git clone https://github.com/Sguha77/Travel_Day.git
 2. Navigate to the Project
@@ -218,6 +233,7 @@ npm run dev
 The application will be available at:
 
 http://localhost:5173
+
 🏗️ Production Build
 
 Create an optimized production build:
@@ -316,7 +332,11 @@ Responsive route layout
 Touch-friendly controls
 Mobile-optimized timeline
 Responsive cards
+
+---
+
 🔄 Application Flow
+```text
              ┌─────────────────┐
              │   Travel Day    │
              └────────┬────────┘
@@ -350,6 +370,9 @@ Responsive cards
       │ Complete    │
       │ Journey     │
       └─────────────┘
+```
+---
+
 🔐 Data & Privacy
 
 The current version of Travel Day is primarily client-side.
@@ -467,4 +490,4 @@ Your support helps the project grow!
 
 Built with ❤️ using React + TypeScript + Tailwind CSS + Vite
 
-</p> ```
+</p> 
