@@ -1,7 +1,12 @@
 # ✈️ Travel Day — Smart Journey Companion
-<p align="center">
+<p align="left">
   <a href="https://travelplaners.netlify.app" target="_blank">
-    <img src="assests/preview.png.jpeg" alt="Travel Day Preview" width="700"/>
+    <img src="assests/preview.png.jpeg" alt="Travel Day Preview" width="300"/>
+  </a>
+</p>
+<p align="right">
+  <a href="https://travelplaners.netlify.app" target="_blank">
+    <img src="assests/preview1.png.jpeg" alt="Travel Day Preview" width="300"/>
   </a>
 </p>
 
