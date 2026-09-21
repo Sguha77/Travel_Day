@@ -2,22 +2,6 @@
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/5242fec8-897b-4f77-99ca-52aaa88a3d0f
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
 # ✈️ Travel Day — Smart Journey Companion
 
 > A modern, intelligent travel companion that turns a flight or train journey into a clear, step-by-step travel timeline.
@@ -133,7 +117,7 @@ Responsive theme-aware components
 The selected theme is stored locally in the browser.
 ```
 💾 Local Data Persistence
-
+```text
 Travel Day currently uses browser localStorage to persist application data.
 
 Stored information includes:
@@ -143,7 +127,7 @@ Completed journey steps
 Theme preference
 
 No backend database is required for the current version.
-
+```
 ---
 
 🎨 UI & Design
@@ -171,14 +155,15 @@ Instead of presenting travel information as static data, Travel Day organizes th
 
 🛠️ Tech Stack
 
-Technology	Purpose
-React	User interface
-TypeScript	Type-safe development
-Vite	Development & build tooling
-Tailwind CSS	Styling
-Lucide React	Interface icons
-Material Symbols	Timeline icons
-LocalStorage	Client-side persistence
+| Technology       | Purpose                     |
+| ---------------- | --------------------------- |
+| React            | User interface              |
+| TypeScript       | Type-safe development       |
+| Vite             | Development & build tooling |
+| Tailwind CSS     | Styling                     |
+| Lucide React     | Interface icons             |
+| Material Symbols | Timeline icons              |
+| LocalStorage     | Client-side persistence     |
 
 ---
 
@@ -221,18 +206,23 @@ Travel_Day/
 
 🚀 Getting Started
 
-1. Clone the Repository
+**Prerequisites:**  Node.js
+
+1. Clone the Repository - 
 git clone https://github.com/Sguha77/Travel_Day.git
-2. Navigate to the Project
+2. Navigate to the Project - 
 cd Travel_Day
-3. Install Dependencies
+3. Install Dependencies - 
 npm install
-4. Start the Development Server
+4. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your API key
+5. Start the Development Server - 
 npm run dev
 
 The application will be available at:
 
 http://localhost:5173
+
+---
 
 🏗️ Production Build
 
@@ -243,9 +233,13 @@ npm run build
 Preview the production build:
 
 npm run preview
-🧩 Core Architecture
-App.tsx
 
+---
+
+🧩 Core Architecture
+
+App.tsx
+```text
 The main application controller.
 
 Responsible for:
@@ -258,8 +252,9 @@ Modal state
 Trip creation
 Timeline completion
 LocalStorage persistence
+```
 TimelineView.tsx
-
+```text
 The main travel dashboard.
 
 Responsible for:
@@ -270,8 +265,9 @@ Journey progress
 Timeline steps
 Travel actions
 Personal notes
+```
 Header.tsx
-
+```text
 Provides:
 
 Trip switching
@@ -280,8 +276,9 @@ AI Companion
 Theme toggle
 Settings access
 Active journey information
+```
 AddTripForm.tsx
-
+```text
 Handles creation of new journeys.
 
 Users can provide information such as:
@@ -294,8 +291,9 @@ Departure time
 Transit preference
 Baggage preference
 Security preference
+```
 timelineGenerator.ts
-
+```text
 Generates the journey timeline based on the selected trip information.
 
 The generated timeline can contain stages such as:
@@ -308,13 +306,16 @@ Boarding
 Journey
 Arrival
 Custom Notes
+```
 BoardingPassModal.tsx
-
+```text
 Displays boarding-pass information for the selected journey.
-
+```
 AIAssistantDrawer.tsx
-
+```text
 Provides the interface for the AI travel companion.
+```
+---
 
 📱 Responsive Design
 
@@ -390,6 +391,9 @@ UI experimentation
 Portfolio development
 Frontend development
 Travel application prototyping
+
+---
+
 🗺️ Roadmap
 
 Future improvements planned for Travel Day include:
@@ -411,6 +415,9 @@ Future improvements planned for Travel Day include:
  Cloud trip synchronization
  Offline / PWA support
  Multi-language support
+
+ ---
+ 
 💡 Use Cases
 
 Travel Day can be used as:
@@ -423,6 +430,9 @@ Travel Day can be used as:
 🎓 React / TypeScript learning project
 💻 Frontend portfolio project
 🎨 UI/UX experimentation project
+
+---
+
 🎯 Project Goals
 
 The main goals of Travel Day are:
@@ -442,6 +452,8 @@ Use modern UI patterns to make travel planning more engaging.
 4. Prepare for AI Integration
 
 Build a foundation for future intelligent travel assistance.
+
+---
 
 🤝 Contributing
 
@@ -463,22 +475,24 @@ git push origin feature/your-feature-name
 
 Then create a Pull Request on GitHub.
 
+---
+
 📄 License
 
 This project is currently intended for learning, experimentation and portfolio purposes.
 
 Please check the repository for the applicable license before redistributing or using the project commercially.
 
+---
+
 👨‍💻 Author
+
 Subhankar Guha
-
-B.Sc. Information Technology Student
-
-Full Stack Developer • AI & GenAI Learner • Cybersecurity Enthusiast
 
 Connect With Me
 GitHub: https://github.com/Sguha77
 LinkedIn: https://www.linkedin.com/in/subhankar-07-guha/
+
 ⭐ Support
 
 If you find Travel Day interesting or useful, consider giving the repository a ⭐ on GitHub.
